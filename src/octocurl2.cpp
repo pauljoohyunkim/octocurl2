@@ -23,6 +23,7 @@ int main(int argc, char** argv)
      * --sort, -s: Sort Queue
     */
     parseCommandLineArguments(argc, argv, taskManager);
+    taskManager.launchWorkers();
 
     return EXIT_SUCCESS;
 }
@@ -37,6 +38,7 @@ static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager
     po::options_description usage("Usage options");
     usage.add_options()
         ("sort,s", "sort queue after prefetching file size.")
+        ("nwork,n", po::value<unsigned int>(), "number of workers (default: 4)")
     ;
     po::options_description hidden;
     hidden.add_options()
@@ -66,6 +68,12 @@ static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager
     {
         tm.options.sort = true;
         std::cout << "Sorting enabled." << std::endl;
+    }
+    if (vm.count("nwork"))
+    {
+        unsigned int nWorkers { vm["nwork"].as<unsigned int>() };
+        tm.setNumOfWorkers(nWorkers);
+        std::cout << "Number of workers set to " << nWorkers << std::endl;
     }
     if (vm.count("inputs"))
     {

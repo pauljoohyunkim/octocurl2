@@ -1,10 +1,14 @@
 #ifndef DOWNLOAD_TASK_HPP
 #define DOWNLOAD_TASK_HPP
 
-#include <cstdio>
-#include <string>
-#include <vector>
 #include <algorithm>
+#include <cstdio>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
+
+#define DEFAULT_NUM_OF_WORKERS 4
 
 struct DownloadTask
 {
@@ -28,12 +32,25 @@ class OctocurlTaskManager
 {
     public:
         void append(DownloadTask task) { tasks.push_back(task); }
-        DownloadTask& operator [] (unsigned int n) { return tasks[n]; } 
         void sort() { std::sort(tasks.begin(), tasks.end(), task_one_before_task_two); }
+
+        void setNumOfWorkers(unsigned int n) { num_of_workers = n; }
+
+        void launchWorkers();
 
         OctocurlOptions options;
     private:
+        bool moreTasksLeft() { return pos < tasks.size(); }
+        DownloadTask& operator [] (unsigned int n) { return tasks[n]; } 
+        void worker();
+        void advance_in_tasks() { pos++; }
+
         std::vector<DownloadTask> tasks;
+        std::vector<std::thread> workers;
+        unsigned int pos { 0 };
+        unsigned int num_of_workers { DEFAULT_NUM_OF_WORKERS };
+        std::mutex mtx;
+        
 };
 
 #endif  // DOWNLOAD_TASK_HPP
