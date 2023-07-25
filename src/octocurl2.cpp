@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <regex>
+#include "curlwrap.hpp"
 #include "download_task.hpp"
 #include "filename.hpp"
 #include "octocurl2.hpp"
@@ -74,7 +75,13 @@ static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager
             std::string url {};
             std::string filename {};
             detectOutputName(inputstring, url, filename);
-            tm.append(DownloadTask(url, filename));
+            DownloadTask task { url, filename };
+            // If sort enabled, prefetch first
+            if (tm.options.sort)
+            {
+                curl_prefetch_filesize(task);
+            }
+            tm.append(task);
         }
     }
 }
