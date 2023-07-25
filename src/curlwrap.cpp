@@ -6,15 +6,12 @@ std::unique_ptr<CURL, void(*)(CURL*)> smart_curl_constructor()
 {
     CURL* curl { curl_easy_init() };
 
-    if (curl)
-    {
-        auto smart_curl_pointer = std::unique_ptr<CURL, void (*)(CURL *)>(curl, smart_curl_deleter);
-        return smart_curl_pointer;
-    }
-    else
+    if (!curl)
     {
         throw std::runtime_error("CURL failed to initialize!");
     }
+    auto smart_curl_pointer = std::unique_ptr<CURL, void (*)(CURL *)>(curl, smart_curl_deleter);
+    return smart_curl_pointer;
 }
 
 void smart_curl_deleter(CURL* curl)
