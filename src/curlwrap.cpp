@@ -1,3 +1,4 @@
+#include <curl/curl.h>
 #include <iostream>
 #include <stdexcept>
 #include "curlwrap.hpp"
@@ -18,4 +19,13 @@ void smart_curl_deleter(CURL* curl)
 {
     curl_easy_cleanup(curl);
     std::cerr << "smart_curl_deleter called" << std::endl;
+}
+
+void curl_download(std::string url, std::string filename)
+{
+    auto smart_curl { smart_curl_constructor() };
+    auto curl { (CURL*) smart_curl.get() };
+
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    CURLcode res { curl_easy_perform(curl) };
 }
