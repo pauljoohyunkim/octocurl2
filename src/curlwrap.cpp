@@ -55,6 +55,5 @@ static size_t get_data_through_task(char* buffer, size_t itemsize, size_t nitems
     auto ptask { (DownloadTask*) ptr };
     std::fwrite(buffer, itemsize, nitems, ptask->fp);
     
-    printf("%s", buffer);
     return bytes;
 }
