@@ -83,6 +83,8 @@ static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager
             }
             tm.append(task);
         }
+        // Sort
+        tm.sort();
     }
 }
 

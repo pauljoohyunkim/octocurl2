@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 struct DownloadTask
 {
@@ -21,11 +22,14 @@ struct OctocurlOptions
     bool sort { false };
 };
 
+bool task_one_before_task_two(DownloadTask task1, DownloadTask task2);
+
 class OctocurlTaskManager
 {
     public:
         void append(DownloadTask task) { tasks.push_back(task); }
         DownloadTask& operator [] (unsigned int n) { return tasks[n]; } 
+        void sort() { std::sort(tasks.begin(), tasks.end(), task_one_before_task_two); }
 
         OctocurlOptions options;
     private:
