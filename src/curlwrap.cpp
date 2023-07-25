@@ -25,7 +25,7 @@ void smart_curl_deleter(CURL* curl)
     std::cerr << "smart_curl_deleter called" << std::endl;
 }
 
-void curl_download(DownloadTask task)
+void curl_download(DownloadTask& task)
 {
     auto smart_curl { smart_curl_constructor() };
     auto curl { (CURL*) smart_curl.get() };
@@ -44,6 +44,8 @@ void curl_download(DownloadTask task)
         std::cerr << curl_easy_strerror(res) << std::endl;
         goto cleanup;
     }
+
+    task.downloaded = true;
 
     cleanup:
         std::fclose(task.fp);

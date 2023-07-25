@@ -6,7 +6,8 @@ int main()
 {
     std::string url { "https://raw.githubusercontent.com/github/gitignore/main/C%2B%2B.gitignore" };
     std::string filename { "gitignore_test" };
-    curl_download(DownloadTask(url, filename));
+    auto task { DownloadTask(url, filename) };
+    curl_download(task);
 
     return 0;
 }
