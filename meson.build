@@ -1,0 +1,5 @@
+project('octocurl2', 'cpp', default_options : ['cpp_std=c++17'])
+
+curldep = dependency('libcurl')
+exe = executable('octocurl2', 'src/octocurl2.cpp',
+  dependencies : [curldep], install : true)
