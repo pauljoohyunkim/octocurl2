@@ -18,12 +18,18 @@ int main(int argc, char** argv)
     generic.add_options()
         ("help,h", "produce help message")
         ("sort,s", "sort queue")
+    ;
+    po::options_description hidden;
+    hidden.add_options()
         ("urls", po::value<std::vector<std::string>>(), "url")
     ;
+
+    po::options_description composite;
+    composite.add(generic).add(hidden);
     po::positional_options_description p;
     p.add("urls", -1);
     po::variables_map vm;
-    po::store(po::command_line_parser(argc, argv).options(generic).positional(p).run(), vm);
+    po::store(po::command_line_parser(argc, argv).options(composite).positional(p).run(), vm);
     po::notify(vm);
     // For each option, do its action.
     if (vm.count("help"))
