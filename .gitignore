@@ -31,4 +31,11 @@
 *.out
 *.app
 
+# Build directory
 build
+
+# Tests
+test/*test
+
+# VSCode
+.vscode
