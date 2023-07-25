@@ -1,6 +1,7 @@
 #ifndef DOWNLOAD_TASK_HPP
 #define DOWNLOAD_TASK_HPP
 
+#include <cstdio>
 #include <string>
 #include <vector>
 
@@ -12,6 +13,7 @@ struct DownloadTask
     unsigned int file_size { 0 };
     unsigned int file_downloaded_length { 0 };
     bool downloaded { false };
+    std::FILE* fp { nullptr };
 };
 
 struct OctocurlOptions

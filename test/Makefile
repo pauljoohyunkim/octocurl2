@@ -8,3 +8,6 @@ curldownloadtest: curldownloadtest.cpp $(SRCDIR)/curlwrap.cpp
 
 defaultnametest: defaultnametest.cpp $(SRCDIR)/curlwrap.cpp $(SRCDIR)/filename.cpp $(SRCDIR)/curlwrap.hpp $(SRCDIR)/filename.hpp
 	$(CXX) $(CXXFLAGS) defaultnametest.cpp $(SRCDIR)/curlwrap.cpp $(SRCDIR)/filename.cpp -o defaultnametest $(LDFLAGS)
+
+clean:
+	$(RM) curldownloadtest defaultnametest gitignore_test
