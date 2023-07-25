@@ -6,6 +6,8 @@
 
 namespace po = boost::program_options;
 
+static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager& tm);
+
 int main(int argc, char** argv)
 {
     OctocurlTaskManager taskManager;
@@ -14,6 +16,13 @@ int main(int argc, char** argv)
      * --help, -h: Help Message
      * --sort, -s: Sort Queue
     */
+    parseCommandLineArguments(argc, argv, taskManager);
+
+    return EXIT_SUCCESS;
+}
+
+static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager& tm)
+{
     po::options_description generic("Generic options");
     generic.add_options()
         ("help,h", "produce help message")
@@ -35,11 +44,11 @@ int main(int argc, char** argv)
     if (vm.count("help"))
     {
         std::cout << generic << "\n";
-        return 1;
+        exit(1);
     }
     if (vm.count("sort"))
     {
-        taskManager.options.sort = true;
+        tm.options.sort = true;
         std::cout << "Sorting enabled." << std::endl;
     }
     if (vm.count("urls"))
@@ -51,5 +60,4 @@ int main(int argc, char** argv)
         }
     }
 
-    return EXIT_SUCCESS;
 }
