@@ -7,6 +7,15 @@
 
 std::string getDefaultFilename(std::string url)
 {
+    // If / found, get the filename directly from the url.
+    auto pos { url.find_last_of('/') };
+    if (pos != std::string::npos)
+    {
+        std::string filename { url.substr(pos+1) };
+        return filename;
+    }
+
+    // Otherwise, do something more sophisticated by fetching header data.
     auto smart_curl { smart_curl_constructor() };
     auto curl { (CURL*) smart_curl.get() };
     CURLcode res;
