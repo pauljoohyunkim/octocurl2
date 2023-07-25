@@ -13,4 +13,9 @@ struct DownloadTask
     bool downloaded { false };
 };
 
+struct OctocurlOptions
+{
+    bool sort { false };
+};
+
 #endif  // DOWNLOAD_TASK_HPP
