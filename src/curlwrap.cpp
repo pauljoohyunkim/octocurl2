@@ -51,6 +51,28 @@ void curl_download(DownloadTask& task)
         std::fclose(task.fp);
 }
 
+void curl_prefetch_filesize(DownloadTask& task)
+{
+    auto smart_curl { smart_curl_constructor() };
+    auto curl { (CURL*) smart_curl.get() };
+
+    // Only get the file size data not the file content.
+    curl_easy_setopt(curl, CURLOPT_URL, task.file_url.c_str());
+    curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
+    auto res { curl_easy_perform(curl) };
+
+    if (res != CURLE_OK)
+    {
+        std::cerr << "Could not fetch file info from " << task.file_url << std::endl;
+        return;
+    }
+
+    curl_off_t filelength;
+    curl_easy_getinfo(curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD_T, &filelength);
+
+    task.file_size = filelength;
+}
+
 static size_t get_data_through_task(char* buffer, size_t itemsize, size_t nitems, void* ptr)
 {
     size_t bytes { itemsize * nitems };
