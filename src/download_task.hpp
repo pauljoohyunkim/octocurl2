@@ -6,7 +6,7 @@
 
 struct DownloadTask
 {
-    DownloadTask(std::string url, std::string name);
+    DownloadTask(std::string url, std::string name) { file_url = url; file_name = name; }
     std::string file_url {};
     std::string file_name {};
     unsigned int file_size { 0 };

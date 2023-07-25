@@ -10,7 +10,7 @@
 namespace po = boost::program_options;
 
 static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager& tm);
-static void detectOutputName(std::string string, std::string& url, std::string& filename, std::string delimiter="->");
+static void detectOutputName(std::string string, std::string& url, std::string& filename, std::string delimiter="::");
 
 int main(int argc, char** argv)
 {
@@ -63,7 +63,7 @@ static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager
             std::string url {};
             std::string filename {};
             detectOutputName(inputstring, url, filename);
-            std::cout << url << "\t" << filename << std::endl;
+            tm.append(DownloadTask(url, filename));
         }
     }
 }
