@@ -8,7 +8,7 @@ namespace po = boost::program_options;
 
 int main(int argc, char** argv)
 {
-    OctocurlOptions octocurlOptions;
+    OctocurlTaskManager taskManager;
     /*
      * Parsing command line options
      * --help, -h: Help Message
@@ -39,13 +39,16 @@ int main(int argc, char** argv)
     }
     if (vm.count("sort"))
     {
-        octocurlOptions.sort = true;
-        std::cout << "Sorting enabled.";
+        taskManager.options.sort = true;
+        std::cout << "Sorting enabled." << std::endl;
     }
-    auto urls = vm["urls"].as<std::vector<std::string>>();
-    for (auto url : urls)
+    if (vm.count("urls"))
     {
-        std::cout << url << std::endl;
+        auto urls = vm["urls"].as<std::vector<std::string>>();
+        for (auto url : urls)
+        {
+            std::cout << url << std::endl;
+        }
     }
 
     return EXIT_SUCCESS;

@@ -2,6 +2,7 @@
 #define DOWNLOAD_TASK_HPP
 
 #include <string>
+#include <vector>
 
 struct DownloadTask
 {
@@ -16,6 +17,17 @@ struct DownloadTask
 struct OctocurlOptions
 {
     bool sort { false };
+};
+
+class OctocurlTaskManager
+{
+    public:
+        void append(DownloadTask task) { tasks.push_back(task); }
+        DownloadTask& operator [] (unsigned int n) { return tasks[n]; } 
+
+        OctocurlOptions options;
+    private:
+        std::vector<DownloadTask> tasks;
 };
 
 #endif  // DOWNLOAD_TASK_HPP
