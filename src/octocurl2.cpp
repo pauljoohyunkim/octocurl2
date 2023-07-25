@@ -6,6 +6,7 @@
 #include <regex>
 #include "download_task.hpp"
 #include "filename.hpp"
+#include "octocurl2.hpp"
 
 namespace po = boost::program_options;
 
@@ -30,7 +31,11 @@ static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager
     po::options_description generic("Generic options");
     generic.add_options()
         ("help,h", "produce help message")
-        ("sort,s", "sort queue")
+        ("version,v", "print version")
+    ;
+    po::options_description usage("Usage options");
+    usage.add_options()
+        ("sort,s", "sort queue after prefetching file size.")
     ;
     po::options_description hidden;
     hidden.add_options()
@@ -38,7 +43,7 @@ static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager
     ;
 
     po::options_description composite;
-    composite.add(generic).add(hidden);
+    composite.add(generic).add(usage).add(hidden);
     po::positional_options_description p;
     p.add("inputs", -1);
     po::variables_map vm;
@@ -47,7 +52,13 @@ static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager
     // For each option, do its action.
     if (vm.count("help"))
     {
-        std::cout << generic << "\n";
+        std::cout << "Usage: " << argv[0] << " [options] url[::output filename]" << std::endl;
+        std::cout << usage << generic << "\n";
+        exit(1);
+    }
+    if (vm.count("version"))
+    {
+        std::cout << "Version: " << OCTOCURL_VERSION << std::endl;
         exit(1);
     }
     if (vm.count("sort"))
