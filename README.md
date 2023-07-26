@@ -1,5 +1,7 @@
 # octocurl2
-C++ implementation of a simple bulk downloader wrapping around curl
+A simple bulk downloader wrapping around curl.
+
+Uses multiple threads to accelerate the process of downloading multiple files.
 
 ## Usage
 ```
