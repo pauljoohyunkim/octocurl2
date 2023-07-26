@@ -47,7 +47,7 @@ void curl_download(DownloadTask& task)
     }
 
     task.downloaded = true;
-    std::cout << url << "->" << filename << " downloaded. [" << task.file_downloaded_length << " bytes]" << std::endl;
+    std::cout << "[Download] " << url << "->" << filename << " downloaded. [" << task.file_downloaded_length << " bytes]" << std::endl;
 
     cleanup:
         std::fclose(task.fp);
@@ -66,7 +66,7 @@ void curl_prefetch_filesize(DownloadTask& task)
 
     if (res != CURLE_OK)
     {
-        std::cerr << "Could not fetch file info from " << task.file_url << std::endl;
+        std::cerr << "[Error] Could not fetch file info from " << task.file_url << std::endl;
         return;
     }
 
@@ -74,6 +74,7 @@ void curl_prefetch_filesize(DownloadTask& task)
     curl_easy_getinfo(curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD_T, &filelength);
 
     task.file_size = filelength;
+    std::cout << "[Prefetching Size] " << task.file_name << ":" << task.file_size << " bytes" << std::endl;
 }
 
 static size_t get_data_through_task(char* buffer, size_t itemsize, size_t nitems, void* ptr)
