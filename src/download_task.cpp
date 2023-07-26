@@ -12,8 +12,12 @@ void OctocurlTaskManager::launchWorkers()
 {
     for (unsigned int i = 0; i < num_of_workers; i++)
     {
-        workers.push_back(std::thread(&OctocurlTaskManager::worker, this));
-        workers.back().join();
+        std::thread th { &OctocurlTaskManager::worker, this };
+        workers.push_back(std::move(th));
+    }
+    for (unsigned int i = 0; i < num_of_workers; i++)
+    {
+        workers[i].join();
     }
 }
 

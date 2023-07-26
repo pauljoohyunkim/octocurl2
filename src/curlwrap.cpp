@@ -79,6 +79,7 @@ static size_t get_data_through_task(char* buffer, size_t itemsize, size_t nitems
     auto ptask { (DownloadTask*) ptr };
     std::fwrite(buffer, itemsize, nitems, ptask->fp);
     ptask->file_downloaded_length += bytes;
+    //std::cout << ptask->file_name << ":" << ptask->file_downloaded_length << std::endl;
     
     return bytes;
 }
