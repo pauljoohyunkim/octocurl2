@@ -1,6 +1,7 @@
 #ifndef DOWNLOAD_TASK_HPP
 #define DOWNLOAD_TASK_HPP
 
+#include "default_params.hpp"
 #include <algorithm>
 #include <cstdio>
 #include <mutex>
@@ -8,7 +9,6 @@
 #include <thread>
 #include <vector>
 
-#define DEFAULT_NUM_OF_WORKERS 4
 
 struct DownloadTask
 {

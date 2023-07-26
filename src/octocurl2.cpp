@@ -5,6 +5,7 @@
 #include <string>
 #include <regex>
 #include "curlwrap.hpp"
+#include "default_params.hpp"
 #include "download_task.hpp"
 #include "filename.hpp"
 #include "octocurl2.hpp"
@@ -21,6 +22,7 @@ int main(int argc, char** argv)
      * Parsing command line options
      * --help, -h: Help Message
      * --sort, -s: Sort Queue
+     * --nwork, -n: Number of workers
     */
     parseCommandLineArguments(argc, argv, taskManager);
     taskManager.launchWorkers();
@@ -36,9 +38,12 @@ static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager
         ("version,v", "print version")
     ;
     po::options_description usage("Usage options");
+    std::string numOfWorkersDescriptionString { "number of workers (default: "};
+    numOfWorkersDescriptionString += std::to_string(DEFAULT_NUM_OF_WORKERS);
+    numOfWorkersDescriptionString += ")";
     usage.add_options()
         ("sort,s", "sort queue after prefetching file size.")
-        ("nwork,n", po::value<unsigned int>(), "number of workers (default: 4)")
+        ("nwork,n", po::value<unsigned int>(), numOfWorkersDescriptionString.c_str())
     ;
     po::options_description hidden;
     hidden.add_options()
@@ -55,7 +60,7 @@ static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager
     // For each option, do its action.
     if (vm.count("help"))
     {
-        std::cout << "Usage: " << argv[0] << " [options] url[::output filename]" << std::endl;
+        std::cout << "Usage: " << argv[0] << " [options] url[::output filename] [url[::output filename]] ..." << std::endl;
         std::cout << usage << generic << "\n";
         exit(1);
     }
