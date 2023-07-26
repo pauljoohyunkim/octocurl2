@@ -25,6 +25,7 @@ int main(int argc, char** argv)
      * --nwork, -n: Number of workers
     */
     parseCommandLineArguments(argc, argv, taskManager);
+    taskManager.launchPreworkers();
     taskManager.launchWorkers();
 
     return EXIT_SUCCESS;
@@ -89,15 +90,8 @@ static void parseCommandLineArguments(int argc, char** argv, OctocurlTaskManager
             std::string filename {};
             detectOutputName(inputstring, url, filename);
             DownloadTask task { url, filename };
-            // If sort enabled, prefetch first
-            if (tm.options.sort)
-            {
-                curl_prefetch_filesize(task);
-            }
             tm.append(task);
         }
-        // Sort
-        tm.sort();
     }
 }
 

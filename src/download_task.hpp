@@ -36,17 +36,21 @@ class OctocurlTaskManager
 
         void setNumOfWorkers(unsigned int n) { num_of_workers = n; }
 
+        // Prefetcher
+        void launchPreworkers();
+        // Downloader
         void launchWorkers();
 
         OctocurlOptions options;
     private:
         bool moreTasksLeft() { return pos < tasks.size(); }
         DownloadTask& operator [] (unsigned int n) { return tasks[n]; } 
+        void prefetchWorker();
         void worker();
         void advance_in_tasks() { pos++; }
+        void resetPos() { pos = 0; }
 
         std::vector<DownloadTask> tasks;
-        std::vector<std::thread> workers;
         unsigned int pos { 0 };
         unsigned int num_of_workers { DEFAULT_NUM_OF_WORKERS };
         std::mutex mtx;
