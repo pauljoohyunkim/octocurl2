@@ -22,7 +22,7 @@ std::unique_ptr<CURL, void(*)(CURL*)> smart_curl_constructor()
 void smart_curl_deleter(CURL* curl)
 {
     curl_easy_cleanup(curl);
-    std::cerr << "smart_curl_deleter called" << std::endl;
+    //std::cerr << "smart_curl_deleter called" << std::endl;
 }
 
 void curl_download(DownloadTask& task)
@@ -46,6 +46,7 @@ void curl_download(DownloadTask& task)
     }
 
     task.downloaded = true;
+    std::cout << filename << " downloaded." << std::endl;
 
     cleanup:
         std::fclose(task.fp);
