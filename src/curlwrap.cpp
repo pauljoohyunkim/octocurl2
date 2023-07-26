@@ -34,6 +34,7 @@ void curl_download(DownloadTask& task)
     task.fp = std::fopen(filename.c_str(), "wb");
 
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_data_through_task);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void*) &task);
     CURLcode res { curl_easy_perform(curl) };
@@ -46,7 +47,7 @@ void curl_download(DownloadTask& task)
     }
 
     task.downloaded = true;
-    std::cout << filename << " downloaded." << std::endl;
+    std::cout << url << "->" << filename << " downloaded. [" << task.file_downloaded_length << " bytes]" << std::endl;
 
     cleanup:
         std::fclose(task.fp);
@@ -59,6 +60,7 @@ void curl_prefetch_filesize(DownloadTask& task)
 
     // Only get the file size data not the file content.
     curl_easy_setopt(curl, CURLOPT_URL, task.file_url.c_str());
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
     auto res { curl_easy_perform(curl) };
 
